@@ -35,7 +35,7 @@ public class SideActivity extends AppCompatActivity {
         TextView plotLabel = findViewById(R.id.Plot);
         TextView runtimeLabel = findViewById(R.id.RunTime);
         TextView ratingLabel = findViewById(R.id.Rating);
-        String arr[] = new String[0];
+        String[] arr = new String[0];
         if (title != null) {
             arr = title.split(" ");
         }
@@ -55,36 +55,25 @@ public class SideActivity extends AppCompatActivity {
         RequestQueue queue = Volley.newRequestQueue(this);
         String url ="http://www.omdbapi.com/?t=" + extra + "&apikey=e34ba0ab";
         JsonObjectRequest getRequest = new JsonObjectRequest(Request.Method.POST, url,  null,
-                new Response.Listener<JSONObject>() {
-                    @SuppressLint("SetTextI18n")
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        // display response
+                response -> {
+                    // display response
 
-                         try {
-                             if (response.getString("Response").equals("False")) {
-                                 Intent2.putExtra("variable", 1);
-                                 startActivity(Intent2);
-                                 
-                             }
-                         ratingLabel.setText("Rating: " + response.getString("imdbRating"));
-                         runtimeLabel.setText("Runtime: " + response.getString("Runtime"));
-                         plotLabel.setText(response.getString("Plot"));
-                         yearLabel.setText("Year: " + response.getString("Year"));
-                         genreLabel.setText(response.getString("Genre"));
-                         titleLabel.setText(response.getString("Title"));
-                         } catch(JSONException e){
-                         e.printStackTrace();
+                     try {
+                         if (response.getString("Response").equals("False")) {
+                             Intent2.putExtra("variable", 1);
+                             startActivity(Intent2);
+
                          }
-                    }
-
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-                startActivity(Intent2);
-            }
-        });
+                     ratingLabel.setText("Rating: " + response.getString("imdbRating"));
+                     runtimeLabel.setText("Runtime: " + response.getString("Runtime"));
+                     plotLabel.setText(response.getString("Plot"));
+                     yearLabel.setText("Year: " + response.getString("Year"));
+                     genreLabel.setText(response.getString("Genre"));
+                     titleLabel.setText(response.getString("Title"));
+                     } catch(JSONException e){
+                     e.printStackTrace();
+                     }
+                }, error -> startActivity(Intent2));
 
         // add it to the RequestQueue
         MySingleton.getInstance(this).addToRequestQueue(getRequest);
